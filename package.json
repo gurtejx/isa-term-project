@@ -1,0 +1,25 @@
+{
+  "name": "isa-term-project",
+  "version": "1.0.0",
+  "description": "COMP4537 Term Project",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "npm start",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gurtejx/isa-term-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gurtejx/isa-term-project/issues"
+  },
+  "homepage": "https://github.com/gurtejx/isa-term-project#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "mongoose": "^8.2.3"
+  }
+}
