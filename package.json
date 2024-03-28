@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "mongoose": "^8.2.3"
+  }
+}
