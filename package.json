@@ -20,6 +20,13 @@
   "homepage": "https://github.com/gurtejx/isa-term-project#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "mongoose": "^8.2.3"
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "html": "^1.0.0",
+    "mongoose": "^8.2.3",
+    "path": "^0.12.7",
+    "session": "^0.1.0"
   }
 }
