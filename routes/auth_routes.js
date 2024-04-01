@@ -39,7 +39,8 @@ router.use(session({
 
 // Route for user sign-in
 router.post('/signin', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
+  const User = mongo.models.User;
 
   try {
     const user = await User.findOne({ username });
@@ -68,7 +69,7 @@ router.post('/signup', async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: 'Username already exists' });
+      return res.status(409).json({ message: 'User with email already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -82,6 +83,5 @@ router.post('/signup', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
 
 export default router;

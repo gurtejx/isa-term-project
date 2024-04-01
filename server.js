@@ -6,6 +6,7 @@ import express from 'express';
 import cors from 'cors';
 import MongoService from "./utilities/mongo_service.js";
 import authRoutes from "./routes/auth_routes.js";
+import logged_in_check from './utilities/auth_middleware.js';
 import path from 'path';
 import session from 'express-session';
 import dotenv from "dotenv";
@@ -32,9 +33,8 @@ const cors_options = {
   optionsSuccessStatus: 200 
 }
 app.use(cors(cors_options));
-
 // Define routes
-app.get('/', (req, res) => {
+app.get('/', logged_in_check, (req, res) => {
   res.render("landingPage");
 });
 
@@ -48,7 +48,7 @@ app.get('/signup', (req, res) => {
   res.render("signup");
 });
 
-app.get('/admin', (req, res) => {
+app.get('/admin', logged_in_check, (req, res) => {
   res.render("admin");
 });
 
