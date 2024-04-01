@@ -20,10 +20,9 @@ class MongoService {
   create_schemas() {
     // user schema
     const userSchema = new mongoose.Schema({
-      username: {
+      firstname: {
         type: String,
         required: true,
-        unique: true,
       },
       email: {
         type: String,

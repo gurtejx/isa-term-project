@@ -5,6 +5,7 @@
 import express from 'express';
 import cors from 'cors';
 import MongoService from "./utilities/mongo_service.js";
+import authRoutes from "./routes/auth_routes.js";
 import path from 'path';
 import session from 'express-session';
 import dotenv from "dotenv";
@@ -14,14 +15,14 @@ const mongo = new MongoService();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret: process.env.NODE_SESSION_SECRET,
-  resave: true,
-  saveUninitialized: true,
-  cookie: {
-      httpOnly: true
-  }
-}));
+// app.use(session({
+//   secret: process.env.NODE_SESSION_SECRET,
+//   resave: true,
+//   saveUninitialized: true,
+//   cookie: {
+//       httpOnly: true
+//   }
+// }));
 app.set("view engine", "ejs");
 app.set("views", path.join(path.resolve(), "views"));
 app.use(express.static(path.join(path.resolve(), "public")));
@@ -35,6 +36,20 @@ app.use(cors(cors_options));
 // Define routes
 app.get('/', (req, res) => {
   res.render("landingPage");
+});
+
+app.use('/', authRoutes);
+
+app.get('/signin', (req, res) => {
+  res.render("signin");
+});
+
+app.get('/signup', (req, res) => {
+  res.render("signup");
+});
+
+app.get('/admin', (req, res) => {
+  res.render("admin");
 });
 
 // Start Express server
