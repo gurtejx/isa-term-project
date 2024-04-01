@@ -17,6 +17,14 @@
         <li><a href="#testimonials">Testimonials</a></li>
         <li><a href="#download">Download</a></li>
     </ul>
+    <% if (isLoggedIn) { %>
+        <form action="/logout" method="POST"> 
+            <button type="submit">Logout</button>
+        </form>
+    <% } else { %>
+        <a href="/signin"><button>Login</button></a>
+        <a href="/signup"><button>Signup</button></a>
+    <% } %>
 </div>
 
 <div class="section features" id="features">

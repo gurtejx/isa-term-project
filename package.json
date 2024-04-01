@@ -21,12 +21,14 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "connect-mongodb-session": "^5.0.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.9",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "html": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.3",
     "path": "^0.12.7",
     "session": "^0.1.0"

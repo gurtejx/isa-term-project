@@ -2,16 +2,15 @@
  * This file contains routes for handling authentication functions.
  */
 import express from 'express';
-import session from "express-session";
 import MongoService from "../utilities/mongo_service.js";
 import bcrypt from 'bcrypt';
 import dotenv from "dotenv";
+import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const router = express.Router();
 const mongo = new MongoService();
 
-// Route for user sign-in
 // Route for user sign-in
 router.post('/signin/password', async (req, res) => {
   const { email, password } = req.body;
@@ -27,18 +26,15 @@ router.post('/signin/password', async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-    console.log("user: " + user);
-    // Set session data (consider user as logged in)
-    req.session.userId = user._id;
-    req.session.authenticated = true;
 
-    // Set req.user to the authenticated user
-    req.user = user;
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '3h' });
 
-    // Redirect to landing page
+    // Set the token as a cookie and then redirect
+    res.cookie('token', token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 3 * 60 * 60 * 1000 });
     res.redirect('/');
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -60,16 +56,27 @@ router.post('/signup', async (req, res) => {
     const newUser = new User({ firstname, email, password: hashedPassword });
     await newUser.save();
 
-    // Set session data (consider user as logged in)
-    req.session.userId = newUser._id;
-
-    // Redirect to landing page
+    // Redirect to landing page or wherever appropriate
     res.redirect('/');
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+// Route for user logout
+router.post('/logout', (req, res) => {
+  try {
+    // Clear the token cookie
+    res.clearCookie('token');
+    // Redirect to the login page or wherever appropriate
+    res.redirect('/signin');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 router.get('/signin', (req, res) => {
   res.render("signin");

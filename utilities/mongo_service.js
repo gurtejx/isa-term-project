@@ -33,6 +33,14 @@ class MongoService {
         type: String,
         required: true,
       },
+      role: {
+        type: String,
+        default: "user",
+      },
+      num_api_calls: {
+        type: Number,
+        default: 0,
+      }
     });
     this.models.User = mongoose.model("User", userSchema);
   }
