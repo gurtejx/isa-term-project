@@ -38,30 +38,39 @@ router.use(session({
 }));
 
 // Route for user sign-in
-router.post('/signin', async (req, res) => {
+// Route for user sign-in
+router.post('/signin/password', async (req, res) => {
   const { email, password } = req.body;
   const User = mongo.models.User;
 
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
-
-    // Set session data
+    console.log("user: " + user);
+    // Set session data (consider user as logged in)
     req.session.userId = user._id;
-    res.status(200).json({ message: 'Sign-in successful' });
+
+    // Set req.user to the authenticated user
+    req.user = user;
+
+    // Redirect to landing page
+    res.redirect('/');
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
+
+
+// Route for user sign-up
 router.post('/signup', async (req, res) => {
   const { firstname, email, password } = req.body;
   const User = mongo.models.User;
@@ -76,12 +85,16 @@ router.post('/signup', async (req, res) => {
     const newUser = new User({ firstname, email, password: hashedPassword });
     await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
-    res.render("landlingPage");
+    // Set session data (consider user as logged in)
+    req.session.userId = newUser._id;
+
+    // Redirect to landing page
+    res.redirect('/');
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 export default router;
