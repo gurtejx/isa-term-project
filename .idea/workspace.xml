@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="524a84dd-af67-443e-abdd-a0cc868c4679" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/auth_routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth_routes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utilities/database_client.js" beforeDir="false" afterPath="$PROJECT_DIR$/utilities/database_client.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/env.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +20,9 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="2eUFBQbK415gX7Y4StlKrVQFqt9" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -47,6 +48,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/routes" />
     </key>
@@ -75,7 +79,7 @@
       <option name="presentableId" value="Default" />
       <updated>1696111773992</updated>
       <workItem from="1711951115030" duration="3309000" />
-      <workItem from="1712019927756" duration="6169000" />
+      <workItem from="1712019927756" duration="6663000" />
     </task>
     <servers />
   </component>
