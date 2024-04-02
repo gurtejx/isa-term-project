@@ -5,6 +5,7 @@ import express from 'express';
 import MongoService from "../utilities/mongo_service.js";
 import bcrypt from 'bcrypt';
 import dotenv from "dotenv";
+import { isLoggedIn, isAdmin } from '../utilities/auth_middleware.js';
 import notifier from "node-notifier";
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
@@ -17,53 +18,53 @@ const mongo = new MongoService();
 
 // Route for user sign-in
 router.post('/signin/password', async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
     const User = mongo.models.User;
 
     try {
-        const user = await User.findOne({email});
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(401).json({message: 'Invalid email or password'});
+            return res.status(401).json({ message: 'Invalid email or password' });
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
-            return res.status(401).json({message: 'Invalid email or password'});
+            return res.status(401).json({ message: 'Invalid email or password' });
         }
 
         // Generate JWT token
-        const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: '3h'});
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '3h' });
 
         // Set the token as a cookie and then redirect
-        res.cookie('token', token, {httpOnly: true, sameSite: 'None', secure: true, maxAge: 3 * 60 * 60 * 1000});
-        res.redirect('/');
+        res.cookie('token', token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 3 * 60 * 60 * 1000 });
+        if (isAdmin) { res.redirect('/admin'); } else { res.redirect('/'); }
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Internal server error'});
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
 
 // Route for user sign-up
 router.post('/signup', async (req, res) => {
-    const {firstname, email, password} = req.body;
+    const { firstname, email, password } = req.body;
     const User = mongo.models.User;
 
     try {
-        const existingUser = await User.findOne({email});
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(409).json({message: 'User with email already exists'});
+            return res.status(409).json({ message: 'User with email already exists' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({firstname, email, password: hashedPassword});
+        const newUser = new User({ firstname, email, password: hashedPassword });
         await newUser.save();
 
         // Redirect to landing page or wherever appropriate
         res.redirect('/');
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Internal server error'});
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
@@ -76,7 +77,7 @@ router.post('/logout', (req, res) => {
         res.redirect('/signin');
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Internal server error'});
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
@@ -105,7 +106,7 @@ router.post('/sendResetEmail', async (req, res) => {
     }
 
     // Check if email exists in database
-    const user = await mongo.models.User.findOne({email: userEmail});
+    const user = await mongo.models.User.findOne({ email: userEmail });
     if (!user) {
         res.redirect('/forgotPassword');
         return;
@@ -118,7 +119,7 @@ router.post('/sendResetEmail', async (req, res) => {
         email: user.email,
         id: user._id
     };
-    const token = jwt.sign(payload, secret, {expiresIn: '15m'});
+    const token = jwt.sign(payload, secret, { expiresIn: '15m' });
     const resetLink = `http://localhost:8000/setNewPassword/${user._id}/${token}`;
 
     // Send password reset email
@@ -197,7 +198,7 @@ router.post('/sendResetEmail', async (req, res) => {
 
 // Route for setting new password
 router.get('/setNewPassword/:userId/:token', async (req, res) => {
-    const {userId, token} = req.params;
+    const { userId, token } = req.params;
 
     // Verify token
     try {
@@ -211,7 +212,7 @@ router.get('/setNewPassword/:userId/:token', async (req, res) => {
         const decodedToken = jwt.verify(token, secret);
 
         // Token is valid, render page for setting new password
-        res.render('setNewPassword', {userId, token});
+        res.render('setNewPassword', { userId, token });
     } catch (error) {
         console.error(error);
         res.redirect('/pageDoesNotExist');
@@ -237,8 +238,8 @@ router.post("/updatePassword", async (req, res) => {
 
         // Update the user's password in the database
         await mongo.models.User.findOneAndUpdate(
-            {_id: userId},
-            {$set: {password: hashedPassword}}
+            { _id: userId },
+            { $set: { password: hashedPassword } }
         );
 
         // Display success message
