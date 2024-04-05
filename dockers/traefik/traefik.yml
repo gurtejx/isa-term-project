@@ -1,0 +1,44 @@
+# traefik.yml
+log:
+  level: error
+
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: true
+
+accessLog:
+  filePath: "/var/log/traefik/traefik.log"
+  bufferingSize: 100
+  filters:
+    statusCodes:
+      - "200-530"
+
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+  # 기본적으로 대시보드를 지원합니다
+  traefik:
+    address: ":5000"
+
+api:
+  dashboard: true
+  insecure: true
+
+providers:
+  docker:
+    exposedByDefault: false
+    swarmMode: false
+    endpoint: "unix:///var/run/docker.sock"
+  file:
+    watch: true
+    filename: "/etc/traefik/dynamic_conf.yml"
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: "lgg4david@gmail.com"
+      storage: "/etc/traefik/acme.json"
+      httpChallenge:
+        entryPoint: "http"

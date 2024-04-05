@@ -32,7 +32,8 @@ export async function isAdmin(req, res, next) {
     const user = await mongo.models.User.findById(req.user.userId);
 
     if (!user || user.role !== 'admin') {
-      return res.status(403).json({ message: 'Access forbidden. Admin role required.' });
+      return res.redirect('/');
+      //return res.status(403).json({ message: 'Access forbidden. Admin role required.' });
     }
 
     // User is authenticated and is admin, continue to next middleware or route handler

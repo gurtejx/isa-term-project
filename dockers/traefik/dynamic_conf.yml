@@ -1,0 +1,48 @@
+# dynamic_conf.yml
+http:
+  services:
+    greeting:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8080"
+          - url: "http://host.docker.internal:8081"
+
+  routers:
+    traefik-api:
+      entryPoints: ["traefik"]
+      rule: "PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
+      service: api@internal
+
+    greeting-http:
+      entryPoints:
+        - http
+      rule: "Host(`{domain}`)"
+      service: greeting
+      middlewares:
+        # http 접근인 경우 https 로 보냅니다
+        - redirect_to_https
+    greeting-https:
+      entryPoints:
+        - https
+      rule: "Host(`www.comp4537llm.com`)"
+      service: greeting
+      middlewares:
+        - web_rate_limit
+      # TLS 를 사용합니다
+      tls:
+        certResolver: letsencrypt
+        # 여러 도메인에 적용하고 싶은 경우
+        # domains:
+        #   - main: example.org
+        #     sans:
+        #       - "*.example.org"
+
+  middlewares:
+    web_rate_limit:
+      rateLimit:
+        average: 16
+        burst: 32
+    redirect_to_https:
+      redirectScheme:
+        scheme: https
+        permanent: true
