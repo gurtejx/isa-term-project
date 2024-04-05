@@ -15,7 +15,19 @@ dotenv.config();
 
 const router = express.Router();
 const mongo = new MongoService();
+const app = express();
 
+// Define routes
+app.get('/', isLoggedIn, (req, res) => {
+    const isLoggedIn = req.verified ? true : false;
+    res.render("landingPage", {isLoggedIn: isLoggedIn});
+});
+
+app.use('/', router);
+
+app.get('/admin', isLoggedIn, isAdmin, (req, res) => {
+    res.render("admin");
+});
 // Route for user sign-in
 router.post('/signin/password', async (req, res) => {
     const { email, password } = req.body;
