@@ -40,6 +40,7 @@ export async function isAdmin(req, res, next) {
     next();
   } catch (error) {
     console.error(error);
+    console.log(3);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
