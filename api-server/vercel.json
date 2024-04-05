@@ -1,5 +1,13 @@
 {
     "version": 2,
+    "env": {
+      "MONGODB_URI": "@MONGODB_URI",
+      "NODE_SESSION_SECRET" :"@NODE_SESSION_SECRET" ,
+      "JWT_SECRET": "@JWT_SECRET",
+      "EMAIL_SERVICE_PROVIDER": "@EMAIL_SERVICE_PROVIDER",
+      "APP_EMAIL": "@APP_EMAIL",
+      "APP_EMAIL_PASSWORD": "@APP_EMAIL_PASSWORD"
+    },
     "builds": [
       {
         "src": "server.js", 
@@ -11,13 +19,5 @@
         "src": "/(.*)",
         "dest": "server.js"
       }
-    ],
-    "env": {
-      "MONGODB_URI": "@MONGODB_URI",
-      "NODE_SESSION_SECRET" :"@NODE_SESSION_SECRET" ,
-      "JWT_SECRET": "@JWT_SECRET",
-      "EMAIL_SERVICE_PROVIDER": "@EMAIL_SERVICE_PROVIDER",
-      "APP_EMAIL": "@APP_EMAIL",
-      "APP_EMAIL_PASSWORD": "@APP_EMAIL_PASSWORD"
-    }
+    ]
   }
