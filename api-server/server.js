@@ -286,7 +286,7 @@ router.post("/updatePassword", async (req, res) => {
 
 
 // Start Express server
-const PORT = 8000;
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
