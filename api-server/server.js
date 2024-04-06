@@ -14,6 +14,10 @@ import notifier from "node-notifier";
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
 import jwt from 'jsonwebtoken';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -25,7 +29,7 @@ app.use(cookie_parser());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "./client-app/views"));
-app.use(express.static(path.join(path.resolve(), "/client-app/public")));
+app.use(express.static(path.join(path.resolve(), "/client-app/public")))
 
 const cors_options = {
     origin: '*',
