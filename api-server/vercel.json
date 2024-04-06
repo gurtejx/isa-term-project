@@ -13,7 +13,7 @@
     }
   ],
   "env": {
-    "MONGO_URI": "@mongo_uri",
+    "MONGO_URI": "@MONGO_URI",
     "JWT_SECRET": "@jwt_secret",
     "EMAIL_SERVICE_PROVIDER": "@email_service_provider",
     "APP_EMAIL": "@app_email",
