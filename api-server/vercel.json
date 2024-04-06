@@ -11,23 +11,5 @@
       "src": "/(.*)",
       "dest": "server.js"
     }
-  ],
-  "env": {
-    "MONGO_URI": "@MONGO_URI",
-    "JWT_SECRET": "@jwt_secret",
-    "EMAIL_SERVICE_PROVIDER": "@email_service_provider",
-    "APP_EMAIL": "@app_email",
-    "APP_EMAIL_PASSWORD": "@app_email_password",
-    "NODE_SESSION_SECRET": "@node_session_secret"
-  },
-  "build": {
-    "env": {
-      "MONGO_URI": "@mongo_uri",
-      "JWT_SECRET": "@jwt_secret",
-      "EMAIL_SERVICE_PROVIDER": "@email_service_provider",
-      "APP_EMAIL": "@app_email",
-      "APP_EMAIL_PASSWORD": "@app_email_password",
-      "NODE_SESSION_SECRET": "@node_session_secret"
-    }
-  }
+  ]
 }
