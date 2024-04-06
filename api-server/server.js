@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(cookie_parser());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-app.set("views", "./client-app/views"));
+app.set("views", "./client-app/views");
 app.use(express.static(path.join(path.resolve(), "/client-app/public")));
 
 const cors_options = {
