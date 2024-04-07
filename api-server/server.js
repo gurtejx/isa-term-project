@@ -63,7 +63,7 @@ app.get('/admin', isLoggedIn, isAdmin, async (req, res) => {
 // Route for user sign-in
 // Route for user sign-in
 router.post('/signin/password', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password,} = req.body;
     const User = mongo.models.User;
 
     try {
@@ -82,7 +82,7 @@ router.post('/signin/password', async (req, res) => {
         res.cookie('token', token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 3 * 60 * 60 * 1000 });
 
         // 여기가 중요합니다: firstname과 num_api_calls를 landingPage에 전달합니다.
-        if(isAdmin){
+        if(user.role === 'admin'){
             try {
                 const users = await mongo.models.User.find({}, 'firstname num_api_calls').lean();
                 res.render("admin", { users }); // users 데이터를 admin 페이지로 전달
