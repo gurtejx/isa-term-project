@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="\css\style.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
 <title>Group 7 App Landing Page</title>
-
 </head>
 <body>
 
@@ -17,14 +16,12 @@
         <li><a href="#testimonials">Testimonials</a></li>
         <li><a href="#download">Download</a></li>
     </ul>
-    <% if (isLoggedIn) { %>
-        <form action="/logout" method="POST"> 
-            <button type="submit">Logout</button>
-        </form>
-    <% } else { %>
-        <a href="/signin"><button>Login</button></a>
-        <a href="/signup"><button>Signup</button></a>
-    <% } %>
+    <!-- 사용자 이름과 API 사용량 표시 -->
+    <div class="user-info">
+        <p>Welcome, <%= firstname %>!</p>
+<p>Your API Usage: <%= num_api_calls %> calls</p>
+
+    </div>
 </div>
 
 <div class="section features" id="features">
@@ -43,7 +40,6 @@
     <p>See what our users have to say about us.</p>
     <!-- Add testimonials here -->
 </div>
-
 
 </body>
 </html>

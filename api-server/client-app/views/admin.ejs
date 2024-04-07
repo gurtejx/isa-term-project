@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="\css\style.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
 <title>Group 7 App Admin Page</title>
-
 </head>
 <body>
 
@@ -19,23 +18,26 @@
     </ul>
 </div>
 
-<div class="section features" id="features">
-    <h2>Features</h2>
-    <p>Explore the innovative features of Group 7 App.</p>
-    <!-- Add your feature list here -->
+<!-- Users Section -->
+<div class="section" id="users">
+    <h2>Users</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>API Calls</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(function(user) { %>
+                <tr>
+                    <td><%= user.firstname %></td>
+                    <td><%= user.num_api_calls %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
 </div>
-
-<div class="section" id="about">
-    <h2>About</h2>
-    <p>Learn more about the story and mission of Group 7 App.</p>
-</div>
-
-<div class="section testimonials" id="testimonials">
-    <h2>Testimonials</h2>
-    <p>See what our users have to say about us.</p>
-    <!-- Add testimonials here -->
-</div>
-
 
 </body>
 </html>

@@ -44,14 +44,23 @@ const router = express.Router();
 // Define routes
 app.get('/', isLoggedIn, (req, res) => {
     const isLoggedIn = req.verified ? true : false;
-    res.render("landingPage", { isLoggedIn: isLoggedIn });
+    res.render("signin", { isLoggedIn: isLoggedIn });
 });
 
 app.use('/', router);
 
-app.get('/admin', isLoggedIn, isAdmin, (req, res) => {
-    res.render("admin");
+// Admin 페이지 라우트
+app.get('/admin', isLoggedIn, isAdmin, async (req, res) => {
+    try {
+        const users = await mongo.models.User.find({}, 'firstname num_api_calls').lean();
+        res.render("admin", { users }); // users 데이터를 admin 페이지로 전달
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
+
+// Route for user sign-in
 // Route for user sign-in
 router.post('/signin/password', async (req, res) => {
     const { email, password } = req.body;
@@ -68,17 +77,31 @@ router.post('/signin/password', async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Generate JWT token
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '3h' });
 
-        // Set the token as a cookie and then redirect
         res.cookie('token', token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 3 * 60 * 60 * 1000 });
-        if (isAdmin) { res.redirect('/admin'); } else { res.redirect('/'); }
+
+        // 여기가 중요합니다: firstname과 num_api_calls를 landingPage에 전달합니다.
+        if(isAdmin){
+            try {
+                const users = await mongo.models.User.find({}, 'firstname num_api_calls').lean();
+                res.render("admin", { users }); // users 데이터를 admin 페이지로 전달
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ message: 'Internal server error' });
+            }
+        } else
+        res.render('landingPage', {
+            firstname: user.firstname, // 사용자의 이름
+            num_api_calls: user.num_api_calls // 사용자의 API 사용 횟수
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+
 
 
 // Route for user sign-up
@@ -119,6 +142,7 @@ router.post('/logout', (req, res) => {
 
 
 router.get('/signin', (req, res) => {
+    if(isLoggedIn)
     res.render("signin");
 });
 
