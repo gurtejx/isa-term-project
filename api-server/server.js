@@ -29,7 +29,7 @@ app.use(cookie_parser());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "./client-app/views"));
-app.use(path.join(__dirname, "./client-app/public"));
+app.use(express.static(path.join(__dirname, "./client-app/public")));
 
 const cors_options = {
     origin: '*',
