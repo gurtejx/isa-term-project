@@ -79,7 +79,7 @@ router.post('/signin/password', async (req, res) => {
 
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '3h' });
 
-        res.cookie('token', token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 3 * 60 * 60 * 1000 });
+        res.cookie('token', token, { httpOn ly: true, sameSite: 'None', secure: true, maxAge: 3 * 60 * 60 * 1000 });
 
         // 여기가 중요합니다: firstname과 num_api_calls를 landingPage에 전달합니다.
         if(isAdmin){
