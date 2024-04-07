@@ -24,7 +24,7 @@ http:
     greeting-https:
       entryPoints:
         - https
-      rule: "Host(`www.comp4537llm.com`)"
+      rule: "Host('www.comp4537llm.com')"
       service: greeting
       middlewares:
         - web_rate_limit

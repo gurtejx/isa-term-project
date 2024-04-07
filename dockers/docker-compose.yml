@@ -1,20 +1,24 @@
 # docker-compose.yml
 version: "3.3"
 
+networks:
+  web:
+    external: true
+
 services:
-  reverse-proxy:
-    image: traefik:v2.7.0
-    container_name: reverse-proxy
+  traefik:
+    image: traefik:alpine
     restart: always
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    labels:
+      - traefik.frontend.rule=Host:traefik.example.com
+      - traefik.port=3333
+      - traefik.enable=true
+
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "/etc/localtime:/etc/localtime:ro"
-      - "./traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
-      - "./traefik/dynamic_conf.yml:/etc/traefik/dynamic_conf.yml"
-      - "./traefik/acme.json:/etc/traefik/acme.json"
+      - ./traefik.toml:/etc/traefik/traefik.toml
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080" # dashboard
+      - 3333:3333
+      - 4444:4444
+    networks:
+      - web

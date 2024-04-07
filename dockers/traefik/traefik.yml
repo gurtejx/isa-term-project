@@ -20,7 +20,7 @@ entryPoints:
     address: ":443"
   # 기본적으로 대시보드를 지원합니다
   traefik:
-    address: ":5000"
+    address: ":4400"
 
 api:
   dashboard: true
