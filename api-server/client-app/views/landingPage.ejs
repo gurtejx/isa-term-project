@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="/css/style.css">
-<title>Group 7 App Landing Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title>Group 7 App Landing Page</title>
 </head>
 <body>
 
 <div class="header">
     <h1>Group 7 App</h1>
     <ul class="nav">
-        <li><a href="#features">Features</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#testimonials">Testimonials</a></li>
-        <li><a href="#download">Download</a></li>
+        <li>
+            <form id="form-logout" action="/logout" method="POST">
+                <a href="#" onclick="document.getElementById('form-logout').submit()" style="color: aquamarine; font-weight: bold">Logout</a>
+            </form>
+        </li>
     </ul>
     <!-- 사용자 이름과 API 사용량 표시 -->
     <div class="user-info">
         <p>Welcome, <%= firstname %>!</p>
-<p>Your API Usage: <%= num_api_calls %> calls</p>
+        <p>Your API Usage: <%= num_api_calls %> calls</p>
 
     </div>
 </div>
