@@ -49,7 +49,7 @@ button
 
 .target-container{
     display: grid;
-    grid-template-columns: 0.5fr 9fr 0.5fr;
+    grid-template-columns: 0.5fr 8.5fr 1fr;
     width: 80%;
 }
 .target-container > input {

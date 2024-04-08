@@ -36,6 +36,10 @@ function compare() {
         .then(r => r.json())
         .then(json => {
             console.log(json);
+            let markingArr = json.marking;
+            for (let i = 1; i <= targetContainers.length; i++) {
+                document.getElementById(`marking-${i}`).innerText = markingArr[i - 1] ? "O" : "X";
+            }
         })
 }
 
