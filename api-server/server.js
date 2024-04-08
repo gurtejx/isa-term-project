@@ -5,7 +5,7 @@
 import express from 'express';
 import cors from 'cors';
 import MongoService from "./utilities/mongo_service.js";
-import { isLoggedIn, isAdmin } from './utilities/auth_middleware.js';
+import {isLoggedIn, isAdmin} from './utilities/auth_middleware.js';
 import path from 'path';
 import cookie_parser from 'cookie-parser';
 import dotenv from "dotenv";
@@ -14,7 +14,7 @@ import notifier from "node-notifier";
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
 import jwt from 'jsonwebtoken';
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,7 +26,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookie_parser());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "./client-app/views"));
 app.use(express.static(path.join(__dirname, "./client-app/public")));
@@ -44,7 +44,23 @@ const router = express.Router();
 // Define routes
 app.get('/', isLoggedIn, (req, res) => {
     const isLoggedIn = req.verified ? true : false;
-    res.render("signin", { isLoggedIn: isLoggedIn });
+    res.render("signin", {isLoggedIn: isLoggedIn});
+});
+
+app.post('/compare', async (req, res) => {
+    const {sourceStr, targetStr,} = req.body;
+    console.log(req.body);
+    await fetch('http://comp4537llm.com/compare/', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(req.body)
+    }).then(r => r.json())
+    .then(json => {
+        console.log(json);
+        res.end(JSON.stringify(json));
+    })
 });
 
 app.use('/', router);
@@ -53,77 +69,75 @@ app.use('/', router);
 app.get('/admin', isLoggedIn, isAdmin, async (req, res) => {
     try {
         const users = await mongo.models.User.find({}, 'firstname num_api_calls').lean();
-        res.render("admin", { users }); // users 데이터를 admin 페이지로 전달
+        res.render("admin", {users}); // users 데이터를 admin 페이지로 전달
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({message: 'Internal server error'});
     }
 });
 
 // Route for user sign-in
 // Route for user sign-in
 router.post('/signin/password', async (req, res) => {
-    const { email, password,} = req.body;
+    const {email, password,} = req.body;
     const User = mongo.models.User;
 
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({email});
         if (!user) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({message: 'Invalid email or password'});
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({message: 'Invalid email or password'});
         }
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '3h' });
+        const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: '3h'});
 
-        res.cookie('token', token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 3 * 60 * 60 * 1000 });
+        res.cookie('token', token, {httpOnly: true, sameSite: 'None', secure: true, maxAge: 3 * 60 * 60 * 1000});
 
         // 여기가 중요합니다: firstname과 num_api_calls를 landingPage에 전달합니다.
-        if(user.role === 'admin'){
+        if (user.role === 'admin') {
             try {
                 const users = await mongo.models.User.find({}, 'firstname num_api_calls').lean();
-                res.render("admin", { users }); // users 데이터를 admin 페이지로 전달
+                res.render("admin", {users}); // users 데이터를 admin 페이지로 전달
             } catch (error) {
                 console.error(error);
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({message: 'Internal server error'});
             }
         } else
-        res.render('landingPage', {
-            firstname: user.firstname, // 사용자의 이름
-            num_api_calls: user.num_api_calls // 사용자의 API 사용 횟수
-        });
+            res.render('landingPage', {
+                firstname: user.firstname, // 사용자의 이름
+                num_api_calls: user.num_api_calls // 사용자의 API 사용 횟수
+            });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({message: 'Internal server error'});
     }
 });
 
 
-
-
 // Route for user sign-up
 router.post('/signup', async (req, res) => {
-    const { firstname, email, password } = req.body;
+    const {firstname, email, password} = req.body;
     const User = mongo.models.User;
 
     try {
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({email});
         if (existingUser) {
-            return res.status(409).json({ message: 'User with email already exists' });
+            return res.status(409).json({message: 'User with email already exists'});
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ firstname, email, password: hashedPassword });
+        const newUser = new User({firstname, email, password: hashedPassword});
         await newUser.save();
 
         // Redirect to landing page or wherever appropriate
         res.redirect('/');
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({message: 'Internal server error'});
     }
 });
 
@@ -136,14 +150,14 @@ router.post('/logout', (req, res) => {
         res.redirect('/signin');
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({message: 'Internal server error'});
     }
 });
 
 
 router.get('/signin', (req, res) => {
-    if(isLoggedIn)
-    res.render("signin");
+    if (isLoggedIn)
+        res.render("signin");
 });
 
 router.get('/signup', (req, res) => {
@@ -166,7 +180,7 @@ router.post('/sendResetEmail', async (req, res) => {
     }
 
     // Check if email exists in database
-    const user = await mongo.models.User.findOne({ email: userEmail });
+    const user = await mongo.models.User.findOne({email: userEmail});
     if (!user) {
         res.redirect('/forgotPassword');
         return;
@@ -179,7 +193,7 @@ router.post('/sendResetEmail', async (req, res) => {
         email: user.email,
         id: user._id
     };
-    const token = jwt.sign(payload, secret, { expiresIn: '15m' });
+    const token = jwt.sign(payload, secret, {expiresIn: '15m'});
     const resetLink = `http://localhost:8000/setNewPassword/${user._id}/${token}`;
 
     // Send password reset email
@@ -258,7 +272,7 @@ router.post('/sendResetEmail', async (req, res) => {
 
 // Route for setting new password
 router.get('/setNewPassword/:userId/:token', async (req, res) => {
-    const { userId, token } = req.params;
+    const {userId, token} = req.params;
 
     // Verify token
     try {
@@ -272,7 +286,7 @@ router.get('/setNewPassword/:userId/:token', async (req, res) => {
         const decodedToken = jwt.verify(token, secret);
 
         // Token is valid, render page for setting new password
-        res.render('setNewPassword', { userId, token });
+        res.render('setNewPassword', {userId, token});
     } catch (error) {
         console.error(error);
         res.redirect('/pageDoesNotExist');
@@ -298,8 +312,8 @@ router.post("/updatePassword", async (req, res) => {
 
         // Update the user's password in the database
         await mongo.models.User.findOneAndUpdate(
-            { _id: userId },
-            { $set: { password: hashedPassword } }
+            {_id: userId},
+            {$set: {password: hashedPassword}}
         );
 
         // Display success message

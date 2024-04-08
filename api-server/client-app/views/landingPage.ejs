@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/landing.js"></script>
     <title>Group 7 App Landing Page</title>
 </head>
 <body>
@@ -13,7 +14,8 @@
     <ul class="nav">
         <li>
             <form id="form-logout" action="/logout" method="POST">
-                <a href="#" onclick="document.getElementById('form-logout').submit()" style="color: aquamarine; font-weight: bold">Logout</a>
+                <a href="#" onclick="document.getElementById('form-logout').submit()"
+                   style="color: aquamarine; font-weight: bold">Logout</a>
             </form>
         </li>
     </ul>
@@ -25,21 +27,19 @@
     </div>
 </div>
 
-<div class="section features" id="features">
-    <h2>Features</h2>
-    <p>Explore the innovative features of Group 7 App.</p>
-    <!-- Add your feature list here -->
-</div>
+<div class="section features" id="api">
+    <div id="target-form">
+        <button onclick="compare()">Check Answers</button>
+        <br>
+        <label for="source-string"> </label>
+        <textarea class="string" id="source-string"></textarea>
+        <br>
 
-<div class="section" id="about">
-    <h2>About</h2>
-    <p>Learn more about the story and mission of Group 7 App.</p>
-</div>
+        <div id="target-string-container">
 
-<div class="section testimonials" id="testimonials">
-    <h2>Testimonials</h2>
-    <p>See what our users have to say about us.</p>
-    <!-- Add testimonials here -->
+        </div>
+        <button type="button" onclick="addTarget()">Add Target</button>
+    </div>
 </div>
 
 </body>

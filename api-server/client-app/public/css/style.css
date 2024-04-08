@@ -1,7 +1,73 @@
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-.header { background-color: #007BFF; color: #FFFFFF; padding: 20px; text-align: center; }
-.nav { display: flex; justify-content: center; list-style-type: none; padding: 0; }
-.nav li { margin: 0 15px; }
-.nav a { color: white; text-decoration: none; }
-.section { padding: 50px; text-align: center; }
-.features, .testimonials { background-color: #F0F0F0; }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+button
+{
+    width: min-content;
+}
+
+.header {
+    background-color: #007BFF;
+    color: #FFFFFF;
+    padding: 20px;
+    text-align: center;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0;
+}
+
+.nav li {
+    margin: 0 15px;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.section {
+    padding: 50px;
+    text-align: center;
+}
+
+.features, .testimonials {
+    background-color: #F0F0F0;
+}
+
+.string
+{
+    width: 80%;
+}
+
+.target-container{
+    display: grid;
+    grid-template-columns: 0.5fr 9fr 0.5fr;
+    width: 80%;
+}
+.target-container > input {
+    height: 2em;
+    width: 100%;
+    margin: auto;
+}
+#target-string-container
+{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+#target-form
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
