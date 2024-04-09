@@ -48,20 +48,40 @@ app.get('/', isLoggedIn, (req, res) => {
 });
 
 app.post('/compare', async (req, res) => {
-    const {sourceStr, targetStr,} = req.body;
+    const {sourceStr, targetStr} = req.body;
     console.log(req.body);
-    await fetch('http://comp4537llm.com/compare/', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req.body)
-    }).then(r => r.json())
-    .then(json => {
-        console.log(json);
-        res.end(JSON.stringify(json));
-    })
+
+    try {
+        // Decode the JWT token from request cookies
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+
+        // Find the user and increment num_api_calls
+        await mongo.models.User.findOneAndUpdate(
+            {_id: userId},
+            {$inc: {num_api_calls: 1}}, // Increment num_api_calls by 1
+            {new: true} // Return the updated document
+        );
+
+        // Proceed with your existing logic to call the external API
+        await fetch('http://comp4537llm.com/compare/', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(req.body)
+        }).then(r => r.json())
+        .then(json => {
+            console.log(json);
+            res.end(JSON.stringify(json));
+        });
+    } catch (error) {
+        console.error('Error incrementing API call count or calling external API:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
 });
+
 
 app.use('/', router);
 
